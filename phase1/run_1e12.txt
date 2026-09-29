@@ -1,0 +1,10 @@
+N = 1000000000000  M = 499999999999500000000000
+isqrt(M) = 707106781186, icbrt(M) = 79370052
+blocks: length-2 (odd start) 26944597549, length>=3 4709120, passed QR filters 7047175
+time: long blocks 0.38s, length-2 stream 159.80s (8 threads)
+  n = 4  primes 2..3 (2 primes)
+  n = 6  primes 3..5 (2 primes)
+  n = 15  primes 3..7 (3 primes)
+  n = 21  primes 2..7 (4 primes)
+  n = 715  primes 3..17 (6 primes)
+      160.18 real      1169.05 user         4.85 sys

@@ -1,0 +1,32 @@
+small-start scan: starts < 100, end primes r <= 4000000000, 40 filters in (4294966217, 2^32)
+SURVIVOR 2 2
+SURVIVOR 2 4
+SURVIVOR 3 2
+SURVIVOR 3 3
+SURVIVOR 3 6
+START 7: 189961808 blocks (lengths 2..189961809), 0 survivors
+START 2: 189961811 blocks (lengths 2..189961812), 2 survivors
+START 5: 189961809 blocks (lengths 2..189961810), 0 survivors
+START 3: 189961810 blocks (lengths 2..189961811), 3 survivors
+START 11: 189961807 blocks (lengths 2..189961808), 0 survivors
+START 17: 189961805 blocks (lengths 2..189961806), 0 survivors
+START 13: 189961806 blocks (lengths 2..189961807), 0 survivors
+START 19: 189961804 blocks (lengths 2..189961805), 0 survivors
+START 23: 189961803 blocks (lengths 2..189961804), 0 survivors
+START 29: 189961802 blocks (lengths 2..189961803), 0 survivors
+START 31: 189961801 blocks (lengths 2..189961802), 0 survivors
+START 37: 189961800 blocks (lengths 2..189961801), 0 survivors
+START 41: 189961799 blocks (lengths 2..189961800), 0 survivors
+START 43: 189961798 blocks (lengths 2..189961799), 0 survivors
+START 47: 189961797 blocks (lengths 2..189961798), 0 survivors
+START 53: 189961796 blocks (lengths 2..189961797), 0 survivors
+START 59: 189961795 blocks (lengths 2..189961796), 0 survivors
+START 61: 189961794 blocks (lengths 2..189961795), 0 survivors
+START 67: 189961793 blocks (lengths 2..189961794), 0 survivors
+START 71: 189961792 blocks (lengths 2..189961793), 0 survivors
+START 73: 189961791 blocks (lengths 2..189961792), 0 survivors
+START 83: 189961789 blocks (lengths 2..189961790), 0 survivors
+START 79: 189961790 blocks (lengths 2..189961791), 0 survivors
+START 89: 189961788 blocks (lengths 2..189961789), 0 survivors
+START 97: 189961787 blocks (lengths 2..189961788), 0 survivors
+DONE

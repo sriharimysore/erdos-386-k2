@@ -1,0 +1,10 @@
+L = 59 (M < 2^L), starts p <= 707106800, threads 8
+Phase A: 36601834 starts excluded by Lemma 2, 36 listed; 2.2s
+Phase B: 48 starts, max start 229, prime table to 1002589
+SURVIVOR 2 2
+SURVIVOR 2 4
+SURVIVOR 3 2
+SURVIVOR 3 3
+SURVIVOR 3 6
+Phase B: 390 blocks tested, 174 skipped by Lemma 2; 0.0s
+DONE

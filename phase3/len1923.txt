@@ -1,0 +1,10 @@
+block-length mode: all lengths k <= 1923, starts p <= 10726905041, threads 8
+Phase A: 483673787 starts excluded by Lemma 2, 2896289 listed; 19.8s
+Phase B: 2896301 starts, max start 48998821, prime table to 53075621
+SURVIVOR 2 2
+SURVIVOR 2 4
+SURVIVOR 3 2
+SURVIVOR 3 3
+SURVIVOR 3 6
+Phase B: 1859956721 blocks tested, 3706733801 skipped by Lemma 2; 118.2s
+DONE

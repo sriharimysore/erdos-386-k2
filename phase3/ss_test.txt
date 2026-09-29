@@ -1,0 +1,32 @@
+small-start scan: starts < 100, end primes r <= 1000000, 40 filters in (4294966217, 2^32)
+SURVIVOR 2 2
+SURVIVOR 3 2
+SURVIVOR 3 3
+SURVIVOR 2 4
+SURVIVOR 3 6
+START 7: 78494 blocks (lengths 2..78495), 0 survivors
+START 5: 78495 blocks (lengths 2..78496), 0 survivors
+START 2: 78497 blocks (lengths 2..78498), 2 survivors
+START 3: 78496 blocks (lengths 2..78497), 3 survivors
+START 11: 78493 blocks (lengths 2..78494), 0 survivors
+START 13: 78492 blocks (lengths 2..78493), 0 survivors
+START 17: 78491 blocks (lengths 2..78492), 0 survivors
+START 19: 78490 blocks (lengths 2..78491), 0 survivors
+START 23: 78489 blocks (lengths 2..78490), 0 survivors
+START 31: 78487 blocks (lengths 2..78488), 0 survivors
+START 37: 78486 blocks (lengths 2..78487), 0 survivors
+START 29: 78488 blocks (lengths 2..78489), 0 survivors
+START 41: 78485 blocks (lengths 2..78486), 0 survivors
+START 43: 78484 blocks (lengths 2..78485), 0 survivors
+START 53: 78482 blocks (lengths 2..78483), 0 survivors
+START 47: 78483 blocks (lengths 2..78484), 0 survivors
+START 61: 78480 blocks (lengths 2..78481), 0 survivors
+START 59: 78481 blocks (lengths 2..78482), 0 survivors
+START 67: 78479 blocks (lengths 2..78480), 0 survivors
+START 79: 78476 blocks (lengths 2..78477), 0 survivors
+START 71: 78478 blocks (lengths 2..78479), 0 survivors
+START 83: 78475 blocks (lengths 2..78476), 0 survivors
+START 73: 78477 blocks (lengths 2..78478), 0 survivors
+START 97: 78473 blocks (lengths 2..78474), 0 survivors
+START 89: 78474 blocks (lengths 2..78475), 0 survivors
+DONE

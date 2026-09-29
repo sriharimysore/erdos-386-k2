@@ -1,1 +1,7 @@
 /.lake
+__pycache__/
+*.o
+phase1/block_search
+phase3/deep_search
+phase3/small_start_scan
+.DS_Store

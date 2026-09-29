@@ -1,0 +1,11 @@
+NOLEMMA: Lemma 2 pruning disabled
+L = 59 (M < 2^L), starts p <= 707106800, threads 8
+Phase A: 0 starts excluded by Lemma 2, 36601870 listed; 2.2s
+Phase B: 36601882 starts, max start 707106791, prime table to 708109151
+SURVIVOR 2 2
+SURVIVOR 2 4
+SURVIVOR 3 2
+SURVIVOR 3 3
+SURVIVOR 3 6
+Phase B: 36688534 blocks tested, 0 skipped by Lemma 2; 19.5s
+DONE
