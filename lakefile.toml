@@ -1,0 +1,10 @@
+name = "erdos 386"
+version = "0.1.0"
+defaultTargets = ["erdos 386"]
+
+[[lean_lib]]
+name = "«Erdos 386»"
+
+[[lean_exe]]
+name = "erdos 386"
+root = "Main"
