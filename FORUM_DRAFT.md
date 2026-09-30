@@ -12,7 +12,9 @@ Code, logs and proofs: [REPO LINK]
 - No solutions besides n = 4, 6, 15, 21, 715 for n ≤ 10⁹. Three independent programs agree.
 - The same holds for n ≤ 10¹², from a single C program that is cross-validated against the
   others up to 10⁹.
-- The largest previous search I found is n ≤ 5·10⁶ (OEIS A280992).
+- OEIS A280992 records no further terms for n ≤ 5·10⁶. D. A. Corneth's comment there shows any
+  further term has a prime factor > prime(2000) = 17389. That covers every block of primes
+  ≤ 17389, which is far beyond 10¹² for blocks starting at small primes.
 
 **2. A balance lemma (elementary; arithmetic core checked in Lean 4).**
 - *Statement.* If n ≥ 4 and every prime factor of C(n,2) lies in [p, r] with p ≥ 5, then
@@ -37,6 +39,8 @@ results as conditional.
 **4. Small starting primes (computation only, single implementation).**
 - Blocks starting at any prime < 100 and ending at a prime ≤ 4·10⁹ give no new solution.
 - In particular, n(n−1) = r# (the "714·715" question) has no new solution for r ≤ 4·10⁹.
+- This extends Corneth's bound (r ≤ 17389) for starting primes below 100. His bound still
+  covers blocks starting between 100 and 17389, which these results do not.
 
 **5. Heuristics.**
 - *Random model.* The n with 2P | n(n−1) are 2^k residues mod 2P. For blocks starting at

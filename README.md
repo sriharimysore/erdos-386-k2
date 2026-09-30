@@ -21,8 +21,14 @@ range and proves structural constraints on any further solution.
 | 4 | For **every** n: any other solution uses ≥ 137 consecutive primes (≥ 1924 under Dusart 2018, **unverified, see AUDIT.md**) | balance lemma + the same theorems | `phase3/LEMMA.md` |
 | 5 | Blocks starting at any prime < 100 and ending at r ≤ 4·10⁹ give only the known solutions (includes n(n−1) = r#, the "714·715" primorial problem, through ~1.9·10⁸ primes) | computation only | `phase3/small_start_scan.c` |
 
-For comparison, the largest previously published search we found is n ≤ 5·10⁶
-(OEIS [A280992](https://oeis.org/A280992)). Nelson, Penney and Pomerance (1974) reportedly
+**Prior work (OEIS [A280992](https://oeis.org/A280992)):**
+- "No more terms up to the 5000000th triangular number", i.e. n ≤ 5·10⁶.
+- D. A. Corneth (2017): any further term is divisible by a prime > prime(2000) = 17389. That
+  is, every block of primes ≤ 17389 is already excluded, which reaches n ≈ 10³⁷⁷⁸ for blocks
+  starting at small primes.
+
+Our results 2 and 4 do not subsume Corneth's. Result 3 would, if Dusart 2018 is confirmed.
+Result 5 (end prime up to 4·10⁹ for starts < 100) extends his bound for small starting primes. Nelson, Penney and Pomerance (1974) reportedly
 searched the primorial case through the first 3049 primes (second-hand; not checked in the paper).
 
 ### The balance lemma

@@ -242,3 +242,22 @@ lemma for consecutive-prime blocks), stated in the upstream vocabulary.
 - any bounded-n result.
 
 There is still no theorem about `erdos_386.variants.two` itself.
+
+---
+
+## Addendum (2026-09-30): OEIS A280992 verified at source; prior work found
+
+The author supplied the text of the OEIS A280992 page.
+- **Verified:** "No more terms up to the 5000000th triangular number." (CLAIMS #17: now yes.)
+- **Prior work missed by the original write-up:** David A. Corneth (Oct 21 2017): "If a(8)
+  exists, it's divisible by a prime p > prime(2000) = 17389." His PARI program `uptoprime`
+  checks every block contained in the first n primes, via ratios of primorials. So every
+  block using only primes ≤ 17389 was already excluded, reaching n ≈ 10³⁷⁷⁸.
+- **Consequences:**
+  - The claim "largest previous search n ≤ 5·10⁶" understated prior work. It has been
+    corrected in the README, forum draft and paper.
+  - Our n ≤ 10⁶⁸² (Dusart 2010) and k ≥ 137 results do **not** subsume Corneth's result.
+  - n ≤ 10⁹⁶¹⁴ would, but it is unverified.
+  - The small-start scan extends his bound for starts < 100 (end primes up to 4·10⁹, versus
+    17389).
+  - The balance lemma, the block-length theorem and the Lean formalization are unaffected.
