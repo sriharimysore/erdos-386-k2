@@ -17,19 +17,26 @@ range and proves structural constraints on any further solution.
 |---|---|---|---|
 | 1 | Only n ∈ {4,6,15,21,715} for 4 ≤ n ≤ 10¹² | computation only | `phase1/` |
 | 2 | Same for n ≤ 10⁶⁸² | balance lemma + Dusart (2010), Prop. 6.8 | `phase3/` |
-| 3 | Same for n ≤ 10⁹⁶¹⁴ | balance lemma + Dusart (2018), Cor. 5.5 | `phase3/` |
-| 4 | For **every** n: any other solution uses ≥ 137 consecutive primes (≥ 1924 under Dusart 2018) | balance lemma + the same theorems | `phase3/LEMMA.md` |
+| 3 | Same for n ≤ 10⁹⁶¹⁴ | balance lemma + Dusart (2018), "Cor. 5.5": **statement not yet verified at source, see AUDIT.md** | `phase3/` |
+| 4 | For **every** n: any other solution uses ≥ 137 consecutive primes (≥ 1924 under Dusart 2018, **unverified, see AUDIT.md**) | balance lemma + the same theorems | `phase3/LEMMA.md` |
 | 5 | Blocks starting at any prime < 100 and ending at r ≤ 4·10⁹ give only the known solutions (includes n(n−1) = r#, the "714·715" primorial problem, through ~1.9·10⁸ primes) | computation only | `phase3/small_start_scan.c` |
 
 For comparison, the largest previously published search we found is n ≤ 5·10⁶
-(OEIS [A280992](https://oeis.org/A280992)). Nelson, Penney and Pomerance (1974) searched
-the primorial case through the first 3049 primes.
+(OEIS [A280992](https://oeis.org/A280992)). Nelson, Penney and Pomerance (1974) reportedly
+searched the primorial case through the first 3049 primes (second-hand; not checked in the paper).
 
 ### The balance lemma
-If C(n,2) = p_a ⋯ p_{a+k−1} with smallest prime p ≥ 5 and largest prime r, then
-(r/p)^⌊k/2⌋ ≥ 2 − 1/p. Why: n and n−1 differ by 1, so the block's primes split into two
-groups whose products are in ratio almost exactly 2. The bound is sharp (equality at
-n = 14, where 91 = 7·13). Full proofs are in [`phase3/LEMMA.md`](phase3/LEMMA.md).
+**General form (what the proof actually uses).** If n ≥ 4 and every prime factor of C(n,2)
+lies in [p, r] with p ≥ 5, then (r/p)^⌊k/2⌋ ≥ 2 − 1/p, where k = Ω(C(n,2)) is the number of
+prime factors counted with multiplicity. Why: n and n−1 differ by 1, so the prime factors
+split into two groups whose products are in ratio almost exactly 2.
+
+**Block form (what the searches use).** If C(n,2) = p_a ⋯ p_{a+k−1} is a block with
+p_a ≥ 5, apply the general form with p = p_a and r = p_{a+k−1}.
+
+**Sharpness.** The general form is sharp: n = 14, C(14,2) = 91 = 7·13, gives equality
+13/7 = 2 − 1/7. That example is *not* a consecutive block (11 is skipped), so it says nothing
+about sharpness of the block form. Full proofs are in [`phase3/LEMMA.md`](phase3/LEMMA.md).
 
 ### Lean 4 (kernel-checked, core Lean only, no Mathlib)
 - `Erdos 386/Balance.lean`: `balance_core` and `balance_mono`, the arithmetic core of the
@@ -55,6 +62,10 @@ record why several natural proof routes fail:
 - Pell / Richaud–Degert,
 - Baker's theory,
 - Fourier / Riesz-product equidistribution.
+
+## Audit
+See [`AUDIT.md`](AUDIT.md) for the adversarial review, [`CLAIMS.md`](CLAIMS.md) for the trust
+level of every claim, and `crosscheck/` for independent checks.
 
 ## Reproducing
 ```

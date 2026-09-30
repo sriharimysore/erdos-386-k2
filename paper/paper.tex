@@ -27,7 +27,7 @@ $\binom{n}{2} = p_a p_{a+1}\cdots p_{a+k-1}$ with $p_a \ge 5$, then
 $(p_{a+k-1}/p_a)^{\lfloor k/2\rfloor} \ge 2 - 1/p_a$. Combined with explicit
 short-interval results for primes, this reduces the problem to a finite computation for
 every bound on $n$. We show there is no further solution with $n \le 10^{682}$, and with
-$n \le 10^{9614}$ assuming a result of Dusart (2018). Unconditionally in $n$, any further
+$n \le 10^{9614}$ assuming a result of Dusart (2018). With no bound on $n$ (but still using these results), any further
 solution must be a product of at least $137$ consecutive primes (at least $1924$ under the
 same result). An exhaustive search shows that no block starting at a prime below $100$ and
 ending at a prime below $4\cdot 10^9$ gives a new solution. The core arithmetic inequality
@@ -39,8 +39,8 @@ is formalized in Lean~4.
 Let $p_0 = 2, p_1 = 3, \dots$ denote the primes. A \emph{block} is a product
 $B(a,k) = p_a p_{a+1} \cdots p_{a+k-1}$ of $k \ge 1$ consecutive primes. Erd\H{o}s and
 Graham \cite{EG} asked whether a binomial coefficient $\binom{n}{k}$, $2 \le k \le n-2$, can
-equal a block infinitely often. For $k=2$ they remark that a proof that this happens only
-finitely often ``seems hopeless''. The problem appears as Problem \#386 at
+equal a block infinitely often. For $k=2$ they reportedly remark that a proof that this happens only
+finitely often ``seems hopeless'' [TO VERIFY quote in \cite{EG}]. The problem appears as Problem \#386 at
 \cite{EP}, and the case $k = 2$ is formalized as \texttt{erdos\_386.variants.two} in
 \cite{FC}.
 
@@ -52,7 +52,8 @@ are
 \]
 The OEIS entry A280992 \cite{OEIS} reports no further solution with $n \le 5\cdot10^6$.
 Blocks starting at $3$ correspond to $n(n-1) = r\#$ (a primorial). This is the question of
-Nelson, Penney and Pomerance \cite{NPP}, who searched the first $3049$ primes.
+Nelson, Penney and Pomerance \cite{NPP}, who reportedly searched the first $3049$ primes
+[TO VERIFY in \cite{NPP}].
 
 \paragraph{Results.} Our main results are:
 \begin{enumerate}
@@ -77,21 +78,22 @@ $\binomtwo{n}$ equals $(n/2)(n-1)$ or $n\cdot\frac{n-1}{2}$, and both factors ar
 \end{proof}
 
 \begin{lemma}[Balance inequality]\label{lem:balance}
-Let $n \ge 4$ and suppose $\binomtwo{n} = B(a,k)$ with $p = p_a \ge 5$. Let $r = p_{a+k-1}$
-and $h = \lfloor k/2 \rfloor$. Then
+Let $n \ge 4$, and suppose every prime factor of $\binomtwo{n}$ lies in $[p, r]$ with
+$p \ge 5$. Let $k = \Omega(\binomtwo{n})$ and $h = \lfloor k/2 \rfloor$. Then
 \[
 p\, r^{h} \;\ge\; (2p-1)\, p^{h}, \qquad\text{equivalently}\qquad
 \Big(\frac{r}{p}\Big)^{h} \ge 2 - \frac1p .
 \]
+In particular, this holds when $\binomtwo{n} = B(a,k)$ with $p = p_a \ge 5$ and
+$r = p_{a+k-1}$.
 \end{lemma}
 
 \begin{proof}
 Let $E$ be the even and $O$ the odd element of $\{n, n-1\}$, and put $A = E/2$. Then
-$\binomtwo{n} = AO$ with $\gcd(A,O) = 1$ and $|2A - O| = 1$. Every prime in the block is
-$\ge 5$, so $AO$ is odd and squarefree. The block's primes therefore split as $S \sqcup T$
-with $A = \prod S$ and $O = \prod T$. Since $n \ge 4$ we have $A \ge 2$ and $O \ge 3$, so
-$S$ and $T$ are non-empty. Put $s = |S|$ and $t = |T|$, so $s+t=k$, and note that every
-element of $S \cup T$ lies in $[p, r]$.
+$\binomtwo{n} = AO$ with $\gcd(A,O) = 1$ and $|2A - O| = 1$. All prime factors are $\ge 5$,
+so $A$ and $O$ are odd. Write $A$ and $O$ as products of $s$ and $t$ primes respectively
+(with multiplicity), all in $[p,r]$, so $s+t = k$, $p^s \le A \le r^s$ and
+$p^t \le O \le r^t$. Since $n \ge 4$, $A \ge 2$ and $O \ge 3$, so $s,t \ge 1$.
 
 \emph{Case $s=t$.} Then $O/A = 2 \pm 1/A \ge 2 - 1/A \ge 2 - 1/p$, while
 $O/A \le r^s/p^s$.
@@ -107,10 +109,12 @@ claim follows.
 \end{proof}
 
 \begin{remark}
-The inequality is sharp: $\binomtwo{14} = 91 = 7\cdot 13$ has $p=7$, $r=13$, $h=1$, and
-$13/7 = 2 - 1/7$. (This is not a solution, because $7$ and $13$ are not consecutive
-primes.) The proof does not use consecutiveness. We checked the general form numerically
-for all $n \le 3\cdot 10^6$.
+Lemma~\ref{lem:balance} is sharp as stated: $\binomtwo{14} = 91 = 7\cdot 13$ has $p=7$,
+$r=13$, $k=2$, and $13/7 = 2 - 1/7$. This example is \emph{not} a block (it skips $11$).
+For blocks, equality would require $p$ and $2p-1$ to be consecutive primes, which is
+impossible for $p \ge 5$ by the Bertrand--Chebyshev theorem (a prime in $(p, 2p-2)$ for
+$p>3$). We verified Lemma~\ref{lem:balance} numerically for all $n \le 3\cdot 10^6$ with
+$\binomtwo{n}$ odd and squarefree.
 \end{remark}
 
 For a fixed start $a$, the left-hand side of Lemma~\ref{lem:balance} is non-decreasing in

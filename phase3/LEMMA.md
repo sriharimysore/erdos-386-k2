@@ -10,24 +10,43 @@ For n ≥ 4, C(n,2) is not prime.
 when n ≥ 4. ∎
 
 ## Lemma 1 (balance)
-Let n ≥ 4 and suppose C(n,2) = B(a,k) with p = p_a ≥ 5. Let r = p_{a+k−1} and h = ⌊k/2⌋. Then
+**Hypothesis actually used by the proof.** Consecutiveness is never used. The proof needs
+only that every prime factor of C(n,2) lies in an interval [p, r] with p ≥ 5.
+
+**Lemma 1 (general form).** Let n ≥ 4, and suppose every prime factor of C(n,2) lies in
+[p, r] with p ≥ 5. Let k = Ω(C(n,2)) (the number of prime factors, counted with
+multiplicity) and h = ⌊k/2⌋. Then
 
     p · r^h ≥ (2p − 1) · p^h,    i.e.  (r/p)^h ≥ 2 − 1/p.
 
-*Proof.* Write {n, n−1} = {E, O} with E even and O odd. Then C(n,2) = A·O with A = E/2, and
-|2A − O| = |E − O| = 1. All block primes are ≥ 5, so C(n,2) is odd and squarefree. The
-factors A and O are coprime, so the block's primes split as S ⊔ T with A = ∏S and O = ∏T.
-Here A ≥ 2 and O ≥ 3 (since n ≥ 4), so S and T are non-empty. Let s = |S| and t = |T|,
-so s + t = k. Every prime in the block lies in [p, r].
+**Corollary 1′ (blocks, the form used everywhere else).** If C(n,2) = B(a,k) with
+p_a ≥ 5, the inequality holds with p = p_a and r = p_{a+k−1}. (A block is squarefree with k
+prime factors, all in [p_a, p_{a+k−1}].)
 
-- **s = t (= h).** O/A = 2 ± 1/A, so O/A ≥ 2 − 1/A ≥ 2 − 1/p. Also O/A ≤ r^s/p^s.
-  Hence (r/p)^h ≥ 2 − 1/p.
+*Proof of Lemma 1.* Write {n, n−1} = {E, O} with E even and O odd. Then C(n,2) = A·O with
+A = E/2, gcd(A, O) = 1, and |2A − O| = |E − O| = 1. Every prime factor is ≥ 5, so A and O
+are odd. Write A as a product of s primes and O as a product of t primes (with
+multiplicity), so s + t = k and all these primes lie in [p, r]. Then p^s ≤ A ≤ r^s and
+p^t ≤ O ≤ r^t. Since n ≥ 4 we have A ≥ 2 and O ≥ 3, so s, t ≥ 1.
+
+- **s = t (= h).** O/A = 2 ± 1/A, so O/A ≥ 2 − 1/A ≥ 2 − 1/p (as A ≥ p^s ≥ p). Also
+  O/A ≤ r^s/p^s. Hence (r/p)^s ≥ 2 − 1/p.
 - **s < t.** Then t ≥ s+1, so p^{s+1} ≤ p^t ≤ O ≤ 2A + 1 ≤ 2r^s + 1. Therefore
-  (r/p)^s ≥ p/2 − 1/(2p^s) ≥ p/2 − 1/(2p), and this is ≥ 2 − 1/p because p² − 4p + 1 ≥ 0 for p ≥ 4.
+  (r/p)^s ≥ p/2 − 1/(2p^s) ≥ p/2 − 1/(2p), and this is ≥ 2 − 1/p because p² − 4p + 1 ≥ 0 for
+  p ≥ 4.
 - **s > t.** Then s ≥ t+1, so 2p^{t+1} ≤ 2A ≤ O + 1 ≤ r^t + 1. Therefore
   (r/p)^t ≥ 2p − p^{−t} ≥ 2 − 1/p.
 
-In each case the exponent is min(s,t) ≤ ⌊k/2⌋ = h. Since r/p ≥ 1, (r/p)^h ≥ (r/p)^{min(s,t)}. ∎
+In each case the exponent is min(s,t) ≤ ⌊k/2⌋ = h. Since r/p ≥ 1,
+(r/p)^h ≥ (r/p)^{min(s,t)}. ∎
+
+**Sharpness (of the general form only).** Equality forces the s = t case with s = 1,
+A = p and O = r = 2p − 1, so k = 2. Example: n = 14, C(14,2) = 91 = 7·13, where p = 7,
+r = 13 and 13/7 = 2 − 1/7. **This is not a block of consecutive primes** (11 is skipped), so
+it shows that Lemma 1 is sharp, not Corollary 1′. For blocks, equality would need p and
+2p − 1 to be consecutive primes. For p ≥ 5 that cannot happen, because by the classical
+Bertrand–Chebyshev theorem there is a prime in (p, 2p − 2) when p > 3. Nothing else relies
+on this remark.
 
 **Monotonicity.** Increasing k (with a fixed) does not decrease r or h, so the condition of
 Lemma 1 is monotone in k. If it fails at length k₀, it fails at every length k ≤ k₀.
@@ -60,7 +79,7 @@ p_{i+1} ≤ p_i(1+ε(p_i)) ≤ p_i(1+ε(p)), so r ≤ p(1+ε)^{k−1}, and
 
     (r/p)^h ≤ exp(ε·(k−1)·k/2).
 
-Lemma 1 needs this to be ≥ 2 − 1/p > 1.99, i.e. ε·k(k−1)/2 ≥ ln 1.99 > 0.688, i.e.
+Corollary 1′ needs this to be ≥ 2 − 1/p > 1.99, i.e. ε·k(k−1)/2 ≥ ln 1.99 > 0.688, i.e.
 k(k−1) > 1.376/ε. But product ≤ M forces p^k ≤ M, i.e. k ≤ ln M / ln p ≤ ln M / ln X₀.
 So if (ln M/ln X₀)·(ln M/ln X₀ − 1) ≤ 1.376/ε(X₀), no start ≥ X₀ can give a solution. (ε is
 non-increasing, so the check at X₀ covers every p ≥ X₀ in each case below. With a constant ε
@@ -107,8 +126,8 @@ ruled out.)
 For start 2 or 3 the block is 2·3·5⋯ or 3·5⋯, and step 2 covered every length k ≤ K. So any
 other solution with k ≤ K would have been found. ∎
 
-**Corollary.** Any further solution has C(n,2) ≥ 2·3·5⋯p₁₉₂₄ (the smallest product of
-1924 consecutive primes), so n is astronomically large. Combined with the deep search, n > 10⁹⁶¹⁴ under
+**Corollary.** Any further solution has C(n,2) ≥ p_0·p_1⋯p_{1923} = 2·3·5⋯ (the product of
+the first 1924 primes, the smallest product of 1924 consecutive primes), so n is astronomically large. Combined with the deep search, n > 10⁹⁶¹⁴ under
 Dusart 2018.
 
 ### Lean status

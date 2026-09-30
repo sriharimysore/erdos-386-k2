@@ -1,0 +1,56 @@
+<!-- DRAFT — do not post until the checklists in AUDIT.md (Task 3, and the OEIS check in
+CLAIMS.md #17) are done. Only claims marked "yes" or "only with caveat" in CLAIMS.md are
+used, with their caveats. -->
+
+**k = 2: a bounded verification and a structural constraint. Not a solution.**
+
+For k = 2 (is n(n−1)/2 a product of consecutive primes infinitely often?) I have some
+computations and one elementary lemma. I'd welcome corrections and pointers to prior work.
+Code, logs and proofs: [REPO LINK]
+
+**1. Search (computation only).**
+- No solutions besides n = 4, 6, 15, 21, 715 for n ≤ 10⁹. Three independent programs agree.
+- The same holds for n ≤ 10¹², from a single C program that is cross-validated against the
+  others up to 10⁹.
+- The largest previous search I found is n ≤ 5·10⁶ (OEIS A280992).
+
+**2. A balance lemma (elementary; arithmetic core checked in Lean 4).**
+- *Statement.* If n ≥ 4 and every prime factor of C(n,2) lies in [p, r] with p ≥ 5, then
+  (r/p)^⌊k/2⌋ ≥ 2 − 1/p, where k = Ω(C(n,2)).
+- *Idea.* Write C(n,2) = A·O with A = E/2, where E and O are the even and odd members of
+  {n, n−1}. Then O = 2A ± 1, so the prime factors split into two groups whose products are
+  in ratio ≈ 2.
+- *Sharpness.* The bound is sharp: n = 14 gives 91 = 7·13 and 13/7 = 2 − 1/7. That example
+  is not a consecutive block.
+- *Consequence for the problem.* A block of consecutive primes starting at a large prime
+  must be long, so its product is huge.
+
+**3. Consequences, conditional on Dusart's explicit prime-gap result.** The result is
+arXiv:1002.0442, Prop. 6.8: for x ≥ 396738 there is a prime in (x, x(1 + 1/(25 ln²x))].
+Using it for starting primes ≥ 1.07·10¹⁰, and computing below that:
+- no solutions besides the five for n ≤ 10⁶⁸²;
+- for *all* n, any further solution is a product of at least 137 consecutive primes.
+
+I'm still checking the published version of that proposition, so please treat these two
+results as conditional.
+
+**4. Small starting primes (computation only, single implementation).**
+- Blocks starting at any prime < 100 and ending at a prime ≤ 4·10⁹ give no new solution.
+- In particular, n(n−1) = r# (the "714·715" question) has no new solution for r ≤ 4·10⁹.
+
+**5. Heuristics.**
+- *Random model.* The n with 2P | n(n−1) are 2^k residues mod 2P. For blocks starting at
+  2 or 3, the least one tracks the random-model prediction λ ≈ P/(2·4^k) up to λ ≈ 10²² (r ≤ 97).
+- *abc.* As far as I can tell, abc gives nothing here, since n(n−1) is squarefree up to
+  the factor 2.
+
+**Trust level.**
+- The computations are ordinary C/Python programs, not formally verified.
+- The Lean 4 part (no Mathlib) covers Lemma 0 and the arithmetic core of the balance lemma,
+  not the connection to `erdos_386.variants.two`.
+
+**Disclosure.** This work was done with substantial assistance from Claude (Anthropic), an
+AI model.
+
+Is the balance lemma already known, and has anyone searched further than this? Pointers to
+either would be very welcome.
