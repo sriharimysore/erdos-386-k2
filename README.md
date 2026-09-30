@@ -16,10 +16,9 @@ range and proves structural constraints on any further solution.
 | # | Statement | Relies on | Where |
 |---|---|---|---|
 | 1 | Only n ∈ {4,6,15,21,715} for 4 ≤ n ≤ 10¹² | computation only | `phase1/` |
-| 2 | Same for n ≤ 10⁶⁸² | balance lemma + Dusart (2010), Prop. 6.8 | `phase3/` |
-| 3 | Same for n ≤ 10⁹⁶¹⁴ | balance lemma + Dusart (2018), "Cor. 5.5": **statement not yet verified at source, see AUDIT.md** | `phase3/` |
-| 4 | For **every** n: any other solution uses ≥ 137 consecutive primes (≥ 1924 under Dusart 2018, **unverified, see AUDIT.md**) | balance lemma + the same theorems | `phase3/LEMMA.md` |
-| 5 | Blocks starting at any prime < 100 and ending at r ≤ 4·10⁹ give only the known solutions (includes n(n−1) = r#, the "714·715" primorial problem, through ~1.9·10⁸ primes) | computation only | `phase3/small_start_scan.c` |
+| 2 | Same for n ≤ 10⁹⁶¹⁴ | balance lemma + Dusart (2018), Cor. 5.5 (verified at source) | `phase3/` |
+| 3 | For **every** n: any other solution is a product of ≥ 1924 consecutive primes | balance lemma + Dusart (2018), Cor. 5.5 | `phase3/LEMMA.md` |
+| 4 | Blocks starting at any prime < 100 and ending at r ≤ 4·10⁹ give only the known solutions (includes n(n−1) = r#, the "714·715" primorial problem, through ~1.9·10⁸ primes) | computation only | `phase3/small_start_scan.c` |
 
 **Prior work (OEIS [A280992](https://oeis.org/A280992)):**
 - "No more terms up to the 5000000th triangular number", i.e. n ≤ 5·10⁶.
@@ -27,8 +26,13 @@ range and proves structural constraints on any further solution.
   is, every block of primes ≤ 17389 is already excluded, which reaches n ≈ 10³⁷⁷⁸ for blocks
   starting at small primes.
 
-Our results 2 and 4 do not subsume Corneth's. Result 3 would, if Dusart 2018 is confirmed.
-Result 5 (end prime up to 4·10⁹ for starts < 100) extends his bound for small starting primes. Nelson, Penney and Pomerance (1974) reportedly
+Result 2 subsumes Corneth's bound: every block of primes ≤ 17389 gives n ≲ 10³⁷⁴⁰ < 10⁹⁶¹⁴.
+Result 4 (end prime up to 4·10⁹ for starts < 100) goes further for small starting primes.
+
+**External input:** results 2 and 3 use exactly one external theorem: Dusart, *Explicit
+estimates of some functions over primes*, Ramanujan J. 45 (2018) 227–251, Cor. 5.5: for
+x ≥ 468,991,632 there is a prime in (x, x(1 + 1/(5000 ln²x))]. This was verified in the
+published text; see AUDIT.md. Nelson, Penney and Pomerance (1974) reportedly
 searched the primorial case through the first 3049 primes (second-hand; not checked in the paper).
 
 ### The balance lemma
@@ -92,9 +96,9 @@ cc -O3 -mcpu=native -o phase1/block_search phase1/block_search.c -lpthread
 cc -O3 -mcpu=native -o phase3/deep_search phase3/deep_search.c -lpthread
 cc -O3 -mcpu=native -o phase3/small_start_scan phase3/small_start_scan.c -lpthread
 ./phase1/block_search 1000000000000          # result 1   (~3 min, 8 cores)
-./phase3/deep_search 4531 | python3 phase3/verify.py   # result 2 (L = bitlength of M for N = 10^682)
-./phase3/deep_search k1923 | python3 phase3/verify.py  # result 4
-./phase3/small_start_scan 4000000000         # result 5   (~13 min)
+./phase3/deep_search 63874 | python3 phase3/verify.py  # result 2 (L = bitlength of M for N = 10^9614, ~8 min)
+./phase3/deep_search k1923 | python3 phase3/verify.py  # result 3
+./phase3/small_start_scan 4000000000         # result 4   (~13 min)
 ```
 Full log of methods, validation and open issues: [`NOTES.md`](NOTES.md).
 

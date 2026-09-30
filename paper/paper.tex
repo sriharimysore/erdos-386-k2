@@ -163,6 +163,13 @@ Lemma~\ref{lem:balance}, using $2 - 1/p \ge 2 - 1/X_0$.
 Evaluating Lemma~\ref{lem:tail} in high-precision arithmetic, a solution with
 $p_a \ge X_0$ needs $k \ge 137$ under \cite{D10}, and $k \ge 1924$ under \cite{D18}.
 
+\begin{remark}
+The bound of \cite{D10} appears in the 2010 preprint but not in the published paper
+\cite{D18}. Since Cor.~5.5 of \cite{D18} gives a smaller $\varepsilon$ on the relevant range
+$x \ge X_0$, every consequence of \cite{D10} used here also follows from \cite{D18}. All
+conditional results therefore rest on the single published statement \cite[Cor.~5.5]{D18}.
+\end{remark}
+
 \section{Computation}
 
 \paragraph{Square test.} $B = n(n-1)/2$ if and only if $1 + 8B = (2n-1)^2$. When $B$ is
@@ -270,7 +277,7 @@ COMPLETED BY AUTHOR: describe what you personally verified].
   arXiv:1002.0442 (2010).
 \bibitem{D18} P.~Dusart, Explicit estimates of some functions over primes,
   \emph{Ramanujan J.} \textbf{45} (2018), 227--251, doi:10.1007/s11139-016-9839-4.
-  [Cor.~5.5 checked only as quoted in \cite{Ax}; confirm against the published text.]
+  (Cor.~5.5, p.~242.)
 \bibitem{EG} P.~Erd\H{o}s and R.~L.~Graham, \emph{Old and New Problems and Results in
   Combinatorial Number Theory}, Monographies de L'Enseignement Math\'ematique 28, 1980.
 \bibitem{EP} T.~Bloom, Erd\H{o}s Problems, Problem \#386,

@@ -27,20 +27,18 @@ Code, logs and proofs: [REPO LINK]
 - *Consequence for the problem.* A block of consecutive primes starting at a large prime
   must be long, so its product is huge.
 
-**3. Consequences, conditional on Dusart's explicit prime-gap result.** The result is
-arXiv:1002.0442, Prop. 6.8: for x ≥ 396738 there is a prime in (x, x(1 + 1/(25 ln²x))].
-Using it for starting primes ≥ 1.07·10¹⁰, and computing below that:
-- no solutions besides the five for n ≤ 10⁶⁸²;
-- for *all* n, any further solution is a product of at least 137 consecutive primes.
-
-I'm still checking the published version of that proposition, so please treat these two
-results as conditional.
+**3. Consequences, conditional on one explicit prime-gap theorem.** The theorem is Dusart,
+Ramanujan J. 45 (2018), Cor. 5.5: for x ≥ 468,991,632 there is a prime in
+(x, x(1 + 1/(5000 ln²x))]. Using it for starting primes ≥ 1.07·10¹⁰, and computing
+everything below that:
+- no solutions besides the five for **n ≤ 10⁹⁶¹⁴**. This contains the region covered by
+  Corneth's bound (every block of primes ≤ 17389 has n ≲ 10³⁷⁴⁰);
+- for **all** n, any further solution is a product of **at least 1924 consecutive primes**.
 
 **4. Small starting primes (computation only, single implementation).**
 - Blocks starting at any prime < 100 and ending at a prime ≤ 4·10⁹ give no new solution.
 - In particular, n(n−1) = r# (the "714·715" question) has no new solution for r ≤ 4·10⁹.
-- This extends Corneth's bound (r ≤ 17389) for starting primes below 100. His bound still
-  covers blocks starting between 100 and 17389, which these results do not.
+- For starting primes below 100 this goes beyond Corneth's r ≤ 17389 (and beyond n ≤ 10⁹⁶¹⁴).
 
 **5. Heuristics.**
 - *Random model.* The n with 2P | n(n−1) are 2^k residues mod 2P. For blocks starting at
@@ -53,7 +51,7 @@ results as conditional.
 - In Lean 4 + Mathlib (no sorry, no native_decide; standard axioms only), the balance lemma
   for blocks is proved with the upstream objects: `n.choose 2 = ∏ i ∈ Finset.Ico a b,
   Nat.nth Nat.Prime i`, a ≥ 2. Lemma 0 is also proved.
-- The bounded results and the prime-gap input are not formalized.
+- The bounded results and Dusart's theorem are not formalized.
 
 **Disclosure.** This work was done with substantial assistance from Claude (Anthropic), an
 AI model.

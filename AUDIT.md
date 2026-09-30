@@ -261,3 +261,47 @@ The author supplied the text of the OEIS A280992 page.
   - The small-start scan extends his bound for starts < 100 (end primes up to 4·10⁹, versus
     17389).
   - The balance lemma, the block-length theorem and the Lean formalization are unaffected.
+
+---
+
+## Addendum (2026-09-30): Dusart 2018 verified at source ✅
+
+The author supplied the full text of Dusart, *Explicit estimates of some functions over
+primes*, Ramanujan J. 45 (2018) 227–251, doi:10.1007/s11139-016-9839-4. Page 242 reads:
+
+> **Corollary 5.5.** For all x ≥ 468 991 632, there exists a prime p such that
+> x < p ≤ x(1 + (1/5000)/ln² x).
+
+It is also stated in the introduction (p. 229): "for x ≥ 468 991 632, the interval
+(x, x + x/(5000 ln² x)] contains at least one prime".
+
+**G2 checklist:**
+- [x] corollary number is 5.5,
+- [x] constant 5000,
+- [x] ln² x (the paper uses ln throughout),
+- [x] x₀ = 468,991,632,
+- [x] interval x < p ≤ x(1 + ε(x)).
+
+The earlier search-summary claim (that Cor. 5.5 is a π(x) bound) was **wrong**: the π(x)
+bounds are Corollaries 5.2 and 5.3.
+
+**Correction note:** it fixes two misprints in the printed formula (3.3) (the published
+paper's Theorem 3.1; the note calls it Theorem 3.5). The note says Table 1 was computed with
+the correct formula, and later results rely on Table 1 and Theorem 4.2. So Cor. 5.5 is not
+affected.
+
+**Caveat found while reading:** the proof printed after Cor. 5.5 is written for the
+1/ln³x form (Prop. 5.4, via maximal-gap tables up to 4·10¹⁸). The derivation of the
+5000/ln²x form is not spelled out separately. It is a refereed published statement and we
+rely on it as such; this is noted for completeness.
+
+**Consequence for G1:** the published paper does **not** contain the 2010 preprint's
+Prop. 6.8 (1/(25 ln²x)); that bound exists only in arXiv:1002.0442v1. This no longer
+matters. For x ≥ X₀ ≥ 468,991,632, Cor. 5.5's interval is contained in Prop. 6.8's, so
+every consequence of G1 (n ≤ 10⁶⁸², k ≥ 137) also follows from Cor. 5.5. **All conditional
+results now rest on the single peer-reviewed Cor. 5.5.**
+
+**Status change:** G2 moves from NEEDS HUMAN VERIFICATION to **verified at source**. Claims
+11–15 are safe to post, with the caveat "conditional on Dusart 2018, Cor. 5.5". n ≤ 10⁹⁶¹⁴
+subsumes Corneth's 2017 bound: every block of primes ≤ 17389 has product ≤ 17389#, i.e.
+n ≲ 10³⁷⁴⁰.
