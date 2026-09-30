@@ -1,0 +1,278 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\binomtwo}[1]{\binom{#1}{2}}
+
+\title{Binomial coefficients $\binom{n}{2}$ that are products of consecutive primes}
+\author{Srihari Mysore}
+\date{DRAFT --- \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Erd\H{o}s and Graham asked whether $\binom{n}{k}$ can be a product of consecutive primes
+infinitely often (Erd\H{o}s Problem \#386). For $k=2$ the known solutions are
+$n = 4, 6, 15, 21, 715$. We prove an elementary \emph{balance inequality}: if
+$\binom{n}{2} = p_a p_{a+1}\cdots p_{a+k-1}$ with $p_a \ge 5$, then
+$(p_{a+k-1}/p_a)^{\lfloor k/2\rfloor} \ge 2 - 1/p_a$. Combined with explicit
+short-interval results for primes, this reduces the problem to a finite computation for
+every bound on $n$. We show there is no further solution with $n \le 10^{682}$, and with
+$n \le 10^{9614}$ assuming a result of Dusart (2018). Unconditionally in $n$, any further
+solution must be a product of at least $137$ consecutive primes (at least $1924$ under the
+same result). An exhaustive search shows that no block starting at a prime below $100$ and
+ending at a prime below $4\cdot 10^9$ gives a new solution. The core arithmetic inequality
+is formalized in Lean~4.
+\end{abstract}
+
+\section{Introduction}
+
+Let $p_0 = 2, p_1 = 3, \dots$ denote the primes. A \emph{block} is a product
+$B(a,k) = p_a p_{a+1} \cdots p_{a+k-1}$ of $k \ge 1$ consecutive primes. Erd\H{o}s and
+Graham \cite{EG} asked whether a binomial coefficient $\binom{n}{k}$, $2 \le k \le n-2$, can
+equal a block infinitely often. For $k=2$ they remark that a proof that this happens only
+finitely often ``seems hopeless''. The problem appears as Problem \#386 at
+\cite{EP}, and the case $k = 2$ is formalized as \texttt{erdos\_386.variants.two} in
+\cite{FC}.
+
+For $k=2$ the question is: for which $n \ge 4$ is $n(n-1)/2$ a block? The known solutions
+are
+\[
+\binomtwo{4} = 2\cdot 3,\quad \binomtwo{6} = 3\cdot 5,\quad \binomtwo{15} = 3\cdot5\cdot7,\quad
+\binomtwo{21} = 2\cdot3\cdot5\cdot7,\quad \binomtwo{715} = 3\cdot5\cdot7\cdot11\cdot13\cdot17.
+\]
+The OEIS entry A280992 \cite{OEIS} reports no further solution with $n \le 5\cdot10^6$.
+Blocks starting at $3$ correspond to $n(n-1) = r\#$ (a primorial). This is the question of
+Nelson, Penney and Pomerance \cite{NPP}, who searched the first $3049$ primes.
+
+\paragraph{Results.} Our main results are:
+\begin{enumerate}
+\item (Theorem~\ref{thm:bounded}) There is no solution other than the five above with
+  $n \le 10^{12}$ (unconditionally), with $n \le 10^{682}$ (using Dusart 2010), and with
+  $n \le 10^{9614}$ (using Dusart 2018).
+\item (Theorem~\ref{thm:length}) For all $n$: any further solution is a block of
+  $k \ge 137$ primes (Dusart 2010), and of $k \ge 1924$ primes (Dusart 2018).
+\item (Theorem~\ref{thm:small}) No block $B(a,k)$ with $p_a < 100$ and
+  $p_{a+k-1} \le 4\cdot10^9$ gives a new solution.
+\end{enumerate}
+All three rest on the balance inequality (Lemma~\ref{lem:balance}), whose proof is
+elementary.
+
+\section{The balance inequality}
+
+\begin{lemma}\label{lem:notprime}
+For $n \ge 4$, $\binomtwo{n}$ is not prime.
+\end{lemma}
+\begin{proof}
+$\binomtwo{n}$ equals $(n/2)(n-1)$ or $n\cdot\frac{n-1}{2}$, and both factors are at least $2$.
+\end{proof}
+
+\begin{lemma}[Balance inequality]\label{lem:balance}
+Let $n \ge 4$ and suppose $\binomtwo{n} = B(a,k)$ with $p = p_a \ge 5$. Let $r = p_{a+k-1}$
+and $h = \lfloor k/2 \rfloor$. Then
+\[
+p\, r^{h} \;\ge\; (2p-1)\, p^{h}, \qquad\text{equivalently}\qquad
+\Big(\frac{r}{p}\Big)^{h} \ge 2 - \frac1p .
+\]
+\end{lemma}
+
+\begin{proof}
+Let $E$ be the even and $O$ the odd element of $\{n, n-1\}$, and put $A = E/2$. Then
+$\binomtwo{n} = AO$ with $\gcd(A,O) = 1$ and $|2A - O| = 1$. Every prime in the block is
+$\ge 5$, so $AO$ is odd and squarefree. The block's primes therefore split as $S \sqcup T$
+with $A = \prod S$ and $O = \prod T$. Since $n \ge 4$ we have $A \ge 2$ and $O \ge 3$, so
+$S$ and $T$ are non-empty. Put $s = |S|$ and $t = |T|$, so $s+t=k$, and note that every
+element of $S \cup T$ lies in $[p, r]$.
+
+\emph{Case $s=t$.} Then $O/A = 2 \pm 1/A \ge 2 - 1/A \ge 2 - 1/p$, while
+$O/A \le r^s/p^s$.
+
+\emph{Case $s<t$.} Then $p^{s+1} \le p^t \le O \le 2A+1 \le 2r^s+1$, so
+$(r/p)^s \ge p/2 - 1/(2p^s) \ge p/2 - 1/(2p) \ge 2 - 1/p$, since $p^2 - 4p + 1 \ge 0$.
+
+\emph{Case $s>t$.} Then $2p^{t+1} \le 2A \le O+1 \le r^t+1$, so
+$(r/p)^t \ge 2p - p^{-t} \ge 2 - 1/p$.
+
+In every case $(r/p)^{\min(s,t)} \ge 2 - 1/p$. Since $\min(s,t) \le h$ and $r \ge p$, the
+claim follows.
+\end{proof}
+
+\begin{remark}
+The inequality is sharp: $\binomtwo{14} = 91 = 7\cdot 13$ has $p=7$, $r=13$, $h=1$, and
+$13/7 = 2 - 1/7$. (This is not a solution, because $7$ and $13$ are not consecutive
+primes.) The proof does not use consecutiveness. We checked the general form numerically
+for all $n \le 3\cdot 10^6$.
+\end{remark}
+
+For a fixed start $a$, the left-hand side of Lemma~\ref{lem:balance} is non-decreasing in
+$k$. Hence:
+
+\begin{corollary}[Monotonicity]\label{cor:mono}
+If the inequality of Lemma~\ref{lem:balance} fails for the block $B(a,k_0)$, it fails for
+every $B(a,k)$ with $k \le k_0$.
+\end{corollary}
+
+\begin{lemma}[Integer test]\label{lem:test}
+Let $p \ge 41$, $d = r-p \ge 0$ and $h \ge 0$. If $100\,h\,d < 68\,p$, then
+$(r/p)^h < 2 - 1/p$.
+\end{lemma}
+\begin{proof}
+$(1+d/p)^h \le e^{hd/p} < e^{0.68} < 1.974 < 2 - 1/41 \le 2 - 1/p$.
+\end{proof}
+
+\section{Large starting primes}
+
+We use explicit short-interval theorems of the following form:
+\begin{quote}
+(G) For all $x \ge x_0$ there is a prime in $(x, x(1+\varepsilon(x))]$, where
+$\varepsilon$ is non-increasing.
+\end{quote}
+Dusart \cite[Prop.~6.8]{D10} proves (G) with $x_0 = 396738$ and
+$\varepsilon(x) = 1/(25\ln^2 x)$. Dusart \cite[Cor.~5.5]{D18} (see also \cite{Ax}) proves it
+with $x_0 = 468991632$ and $\varepsilon(x) = 1/(5000\ln^2 x)$. Let
+$X_0 = 10\,726\,905\,041$.
+
+\begin{lemma}\label{lem:tail}
+Assume (G) with $x_0 \le X_0$, and put $\varepsilon = \varepsilon(X_0)$. If
+$\binomtwo{n} = B(a,k)$ with $p_a \ge X_0$, then
+\[
+\varepsilon\,(k-1)\lfloor k/2\rfloor \;\ge\; \ln(2 - 1/X_0).
+\]
+\end{lemma}
+\begin{proof}
+For $i \ge a$ we have $p_{i+1} \le p_i(1+\varepsilon(p_i)) \le p_i(1+\varepsilon)$, so
+$r \le p(1+\varepsilon)^{k-1}$ and $(r/p)^{h} \le \exp(\varepsilon(k-1)h)$. Now apply
+Lemma~\ref{lem:balance}, using $2 - 1/p \ge 2 - 1/X_0$.
+\end{proof}
+
+Evaluating Lemma~\ref{lem:tail} in high-precision arithmetic, a solution with
+$p_a \ge X_0$ needs $k \ge 137$ under \cite{D10}, and $k \ge 1924$ under \cite{D18}.
+
+\section{Computation}
+
+\paragraph{Square test.} $B = n(n-1)/2$ if and only if $1 + 8B = (2n-1)^2$. When $B$ is
+small we test this with an exact integer square root. For huge blocks we use $40$--$48$
+filter primes $\ell$ and reject $B$ as soon as $1 + 8B \bmod \ell$ is a quadratic
+non-residue (computed with the Jacobi-symbol algorithm). A true square is never rejected.
+Every block that passes all the filters is re-checked exactly.
+
+\paragraph{Search A (bounded $n$).} Fix $N$, $M = N(N-1)/2$ and $L = $ the bit length of $M$.
+For a start $p$, let $e = \lfloor \log_2 p \rfloor$ and $K = \lceil L/e \rceil$. Blocks of
+length $\ge K$ exceed $M$. For each start $p < X_0$ with $p \ge 41$, if
+Lemma~\ref{lem:test} shows that Lemma~\ref{lem:balance} fails at length $K-1$, the start is
+discarded (Corollary~\ref{cor:mono}). Otherwise all lengths $2 \le k < K$ are tested.
+Starts $p < 41$ are always tested in full. Starts $p \ge X_0$ are handled by
+Lemma~\ref{lem:tail} (the required $k$ exceeds $\ln M/\ln X_0$).
+
+\paragraph{Search B (bounded $k$).} This is the same search with $K-1$ replaced by a fixed
+maximal length $k_{\max}$.
+
+\paragraph{Validation.}
+\begin{itemize}
+\item Three independent programs (a block search, a loop over $n$ with factorization, and
+  Search A with and without the pruning of Lemma~\ref{lem:test}) agree for $N = 10^6$ and
+  $10^9$.
+\item In every run the number of starts processed equals $\pi(X_0) = 486\,570\,088$,
+  computed independently.
+\item No block has ever passed all the filters without being a genuine solution.
+\end{itemize}
+
+\begin{theorem}\label{thm:bounded}
+If $4 \le n \le N$ and $\binomtwo{n}$ is a block, then $n \in \{4,6,15,21,715\}$, where
+$N = 10^{12}$ unconditionally, $N = 10^{682}$ assuming \cite{D10}, and $N = 10^{9614}$
+assuming \cite{D18}.
+\end{theorem}
+
+\begin{theorem}\label{thm:length}
+If $\binomtwo{n}$ is a block of $k$ primes and $n \notin \{4,6,15,21,715\}$, then
+$k \ge 137$ (assuming \cite{D10}) and $k \ge 1924$ (assuming \cite{D18}).
+\end{theorem}
+\begin{proof}
+Starts $p_a \ge X_0$ are handled by Lemma~\ref{lem:tail}. Search~B with $k_{\max} = 136$
+and $k_{\max} = 1923$ covers all starts $p_a < X_0$.
+\end{proof}
+
+\begin{theorem}\label{thm:small}
+If $\binomtwo{n} = B(a,k)$ with $p_a < 100$ and $p_{a+k-1} \le 4\cdot10^9$, then
+$n \in \{4,6,15,21,715\}$. In particular, $n(n-1) = r\#$ and $n(n-1) = 2\cdot r\#$ have no
+other solutions with $r \le 4\cdot 10^9$.
+\end{theorem}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+run & time (8 cores) & starts enumerated & blocks tested \\
+\midrule
+Theorem~\ref{thm:bounded}, $N = 10^{12}$ (no pruning) & 160 s & --- & $2.7\cdot 10^{10}$ \\
+Theorem~\ref{thm:bounded}, $N = 10^{682}$ & 33 s & 45\,555 & $5.1\cdot10^6$ \\
+Theorem~\ref{thm:bounded}, $N = 10^{9614}$ & 480 s & 4\,702\,043 & $4.8\cdot10^9$ \\
+Theorem~\ref{thm:length}, $k_{\max} = 1923$ & 138 s & 2\,896\,301 & $1.9\cdot10^9$ \\
+Theorem~\ref{thm:small} & 775 s & 25 & $4.7\cdot10^9$ \\
+\bottomrule
+\end{tabular}
+\caption{Computations (Apple M2).}
+\end{table}
+
+\section{Heuristics and obstacles}
+
+The integers $n$ with $2B \mid n(n-1)$ are the $2^{k}$ residues obtained from the splittings
+of the block's primes between $n$ and $n-1$. A solution is exactly the case where the
+least nontrivial residue $n$ satisfies $\lambda := n(n-1)/(2B) = 1$. Modelling the residues
+as $2^k$ random points in $[0, 2B)$ predicts $\lambda \approx B/4^k$. For blocks starting at
+$2$ or $3$ and ending at $r \le 97$ (exhaustive enumeration), the observed minimum
+$\lambda$ follows this prediction up to $\lambda \approx 10^{22}$. It equals $1$ only for
+the known solutions.
+
+Several natural routes to finiteness seem blocked:
+\begin{itemize}
+\item \textbf{abc.} The abc conjecture gives nothing, because $n(n-1)$ is squarefree up to
+  the factor $2$. (Compare Brocard's problem, where abc does apply.)
+\item \textbf{Size arguments.} The equation $|2\prod S - \prod T| = 1$ sits exactly at the
+  trivial bound for a difference of distinct integers.
+\item \textbf{Equidistribution.} The Fourier transform of the residue set is the Riesz
+  product $\prod_q (1 + e(h c_q/q))$, with $c_q \equiv (2B/q)^{-1} \pmod q$. The set has
+  only $2^k$ points, far too few for equidistribution at scale $\sqrt{B}$ to rule out a
+  point in $[2, \sqrt{2B}]$.
+\end{itemize}
+
+\section{Formalization and data}
+
+Lemma~\ref{lem:notprime} and the arithmetic core of Lemma~\ref{lem:balance} (the three
+cases above, stated for lists of factors in $[p,r]$), together with the monotonicity in
+$h$, are formalized in Lean~4 without Mathlib. The proofs use only the axioms
+\texttt{propext} and \texttt{Quot.sound}. The code, logs and Lean sources are available at
+[repository URL].
+
+\paragraph{Acknowledgements.} The computations, proofs and formalization were developed with
+substantial assistance from Claude (Anthropic), an AI model. The author checked [TO BE
+COMPLETED BY AUTHOR: describe what you personally verified].
+
+\begin{thebibliography}{9}
+\bibitem{Ax} C.~Axler, New estimates for some functions defined over primes,
+  arXiv:1703.08032.
+\bibitem{D10} P.~Dusart, Estimates of some functions over primes without R.H.,
+  arXiv:1002.0442 (2010).
+\bibitem{D18} P.~Dusart, Explicit estimates of some functions over primes,
+  \emph{Ramanujan J.} \textbf{45} (2018), 227--251. [verify citation details]
+\bibitem{EG} P.~Erd\H{o}s and R.~L.~Graham, \emph{Old and New Problems and Results in
+  Combinatorial Number Theory}, Monographies de L'Enseignement Math\'ematique 28, 1980.
+\bibitem{EP} T.~Bloom, Erd\H{o}s Problems, Problem \#386,
+  \url{https://www.erdosproblems.com/386}.
+\bibitem{FC} Google DeepMind, formal-conjectures,
+  \url{https://github.com/google-deepmind/formal-conjectures}.
+\bibitem{NPP} C.~Nelson, D.~E.~Penney and C.~Pomerance, 714 and 715,
+  \emph{J. Recreational Math.} \textbf{7} (1974), 87--89. [verify citation details]
+\bibitem{OEIS} OEIS Foundation, Sequence A280992, \url{https://oeis.org/A280992}.
+\end{thebibliography}
+
+\end{document}
