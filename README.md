@@ -108,7 +108,6 @@ cc -O3 -mcpu=native -o phase3/small_start_scan phase3/small_start_scan.c -lpthre
 ```
 Full log of methods, validation and open issues: [`NOTES.md`](NOTES.md).
 
-## Credits and AI disclosure
-Project directed by Srihari Mysore. The code, proofs and Lean formalization were developed
-with substantial assistance from Claude (Anthropic), an AI model. All claims above are
-meant to be independently checkable, and corrections are welcome.
+## Credits
+By Srihari Mysore. All claims above are meant to be independently checkable, and
+corrections are welcome.
