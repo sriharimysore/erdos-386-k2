@@ -1,56 +1,41 @@
-**k = 2: a bounded verification and a structural constraint. Not a solution.**
+**k = 2: making StijnC's argument explicit, and a bounded verification. Not a solution.**
 
-For k = 2 (is n(n−1)/2 a product of consecutive primes infinitely often?) I have some
-computations and one elementary lemma. I'd welcome corrections and pointers to prior work.
-Code, logs and proofs: https://github.com/sriharimysore/erdos-386-k2
+Building on @StijnC's observation (24 Aug 2025) that 2∏_I p_i and ∏_J p_j must differ by
+exactly 1, so that each fixed block length allows only finitely many solutions, I tried to
+make this fully explicit and push it as far as possible. Code, logs and proofs:
+https://github.com/sriharimysore/erdos-386-k2
 
-**1. Search (computation only).**
-- No solutions besides n = 4, 6, 15, 21, 715 for n ≤ 10⁹. Three independent programs agree.
-- The same holds for n ≤ 10¹², from a single C program that is cross-validated against the
-  others up to 10⁹.
-- OEIS A280992 records no further terms for n ≤ 5·10⁶. D. A. Corneth's comment there shows any
-  further term has a prime factor > prime(2000) = 17389. That covers every block of primes
-  ≤ 17389, which is far beyond 10¹² for blocks starting at small primes.
-
-**2. A balance lemma (elementary; block form machine-checked in Lean 4 + Mathlib).**
+**1. A quantitative form of the balance argument.**
 - *Statement.* If n ≥ 4 and every prime factor of C(n,2) lies in [p, r] with p ≥ 5, then
   (r/p)^⌊k/2⌋ ≥ 2 − 1/p, where k = Ω(C(n,2)).
-- *Idea.* Write C(n,2) = A·O with A = E/2, where E and O are the even and odd members of
-  {n, n−1}. Then O = 2A ± 1, so the prime factors split into two groups whose products are
-  in ratio ≈ 2.
-- *Sharpness.* The bound is sharp: n = 14 gives 91 = 7·13 and 13/7 = 2 − 1/7. That example
-  is not a consecutive block.
-- *Consequence for the problem.* A block of consecutive primes starting at a large prime
-  must be long, so its product is huge.
+- *Proof idea.* Write C(n,2) = A·O with O = 2A ± 1 and split the primes between A and O.
+  There are three cases: |S| = |T|, |S| < |T|, |S| > |T|.
+- *Sharpness.* n = 14, 91 = 7·13 gives equality. That example is not a consecutive block.
+- *Lean.* The block form is machine-checked in Lean 4 + Mathlib, stated with the upstream
+  objects `n.choose 2 = ∏ i ∈ Finset.Ico a b, Nat.nth Nat.Prime i` (a ≥ 2). No sorry, no
+  native_decide.
 
-**3. Consequences, conditional on one explicit prime-gap theorem.** The theorem is Dusart,
-Ramanujan J. 45 (2018), Cor. 5.5: for x ≥ 468,991,632 there is a prime in
-(x, x(1 + 1/(5000 ln²x))]. Using it for starting primes ≥ 1.07·10¹⁰, and computing
-everything below that:
-- no solutions besides the five for **n ≤ 10⁹⁶¹⁴**. This contains the region covered by
-  Corneth's bound (every block of primes ≤ 17389 has n < 10³⁷⁴²);
-- for **all** n, any further solution is a product of **at least 1924 consecutive primes**.
+**2. Explicit consequences.** These are conditional on one prime-gap theorem: Dusart,
+Ramanujan J. 45 (2018), Cor. 5.5, which says that for x ≥ 468,991,632 there is a prime in
+(x, x(1 + 1/(5000 ln²x))]. I use it for starting primes ≥ 1.07·10¹⁰ and a computer search
+below that.
+- **For all n**, any further solution is a product of **at least 1924 consecutive primes**.
+  This makes StijnC's "finitely many for each fixed length" explicit. In fact there are
+  none with ≤ 1923 primes.
+- No solutions besides 4, 6, 15, 21, 715 for **n ≤ 10⁹⁶¹⁴**. This extends Desmond's search
+  (n > 10⁵⁰⁰, per StijnC's comment), and it also covers Corneth's OEIS A280992 bound (any
+  further term has a prime factor > 17389).
 
-**4. Small starting primes (computation only, single implementation).**
-- Blocks starting at any prime < 100 and ending at a prime ≤ 4·10⁹ give no new solution.
-- In particular, n(n−1) = r# (the "714·715" question) has no new solution for r ≤ 4·10⁹.
-- For starting primes below 100 this goes beyond Corneth's r ≤ 17389 (and beyond n ≤ 10⁹⁶¹⁴).
+**3. Computation only (no prime-gap input; ordinary C/Python, not formally verified).**
+- No further solution for n ≤ 10¹². Three independent programs agree up to 10⁹, and one C
+  program was run to 10¹².
+- Blocks starting at any prime < 100 and ending at a prime ≤ 4·10⁹ give nothing new. In
+  particular, n(n−1) = r# has no new solution for r ≤ 4·10⁹.
 
-**5. Heuristics.**
-- *Random model.* The n with 2P | n(n−1) are 2^k residues mod 2P. For blocks starting at
-  2 or 3, the least one tracks the random-model prediction λ ≈ P/(2·4^k) up to λ ≈ 10²² (r ≤ 97).
-- *abc.* As far as I can tell, abc gives nothing here, since n(n−1) is squarefree up to
-  the factor 2.
+**4. A remark on why the long-block case looks hard.** The n with 2P | n(n−1) are 2^k
+residues mod 2P. For blocks starting at 2 or 3, the least one tracks the random-model
+prediction λ = n(n−1)/(2P) ≈ P/(2·4^k), up to λ ≈ 10²² (r ≤ 97). As far as I can tell, abc
+gives nothing here, since n(n−1) is squarefree up to the factor 2.
 
-**Trust level.**
-- The computations are ordinary C/Python programs, not formally verified.
-- In Lean 4 + Mathlib (no sorry, no native_decide; standard axioms only), the balance lemma
-  for blocks is proved with the upstream objects: `n.choose 2 = ∏ i ∈ Finset.Ico a b,
-  Nat.nth Nat.Prime i`, a ≥ 2. So is the fact that C(n,2) is never prime for n ≥ 4.
-- The bounded results and Dusart's theorem are not formalized.
-
-**Disclosure.** This work was done with substantial assistance from Claude (Anthropic), an
-AI model.
-
-Is the balance lemma already known, and has anyone searched further than this? Pointers to
-either would be very welcome.
+**Disclosure.** This was done with substantial assistance from Claude (Anthropic), an AI
+model. Corrections are very welcome, especially on the explicit constants in part 2.
