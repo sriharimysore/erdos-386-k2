@@ -1,0 +1,293 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\binomtwo}[1]{\binom{#1}{2}}
+
+\title{When is $\binom{n}{2}$ a product of consecutive primes?\\[4pt]
+\large A guided introduction to Erd\H{o}s Problem \#386 (case $k=2$)}
+\author{Srihari Mysore}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This is an expository companion to the research note \emph{Binomial coefficients
+$\binom{n}{2}$ that are products of consecutive primes}. It explains, from first principles,
+every idea used there. The ideas are: why $\binom{n}{2}$ splits into two nearly balanced
+pieces (an observation due to StijnC on the Erd\H{o}s Problems forum); an explicit
+``balance inequality''; how an explicit prime-gap theorem of Dusart turns that inequality
+into concrete bounds; how the computer search is organized and checked; what a Lean
+formalization certifies; and why a full solution appears out of reach. Worked examples and
+exercises (with solutions) are included. Nothing here solves the problem.
+\end{abstract}
+
+\tableofcontents
+
+\section{The problem}
+
+The binomial coefficient $\binom{n}{2} = n(n-1)/2$ counts the ways to choose $2$ objects from
+$n$. A \emph{block} is a product of consecutive primes with nothing skipped. For example,
+$3\cdot5\cdot7$ is a block, but $7\cdot 13$ is not, because it skips $11$.
+
+\begin{center}
+\begin{tabular}{rrl}
+\toprule
+$n$ & $\binom{n}{2}$ & block \\
+\midrule
+4 & 6 & $2\cdot 3$ \\
+6 & 15 & $3\cdot 5$ \\
+15 & 105 & $3\cdot 5\cdot 7$ \\
+21 & 210 & $2\cdot 3\cdot 5\cdot 7$ \\
+715 & 255255 & $3\cdot 5\cdot 7\cdot 11\cdot 13\cdot 17$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Question} (Erd\H{o}s--Graham). Are there infinitely many $n$ for which
+$\binom{n}{2}$ is a block?
+
+The answer is widely believed to be \emph{no}, but no proof is known. This document explains
+what \emph{can} be proved, and how far a careful computation reaches.
+
+\subsection{A test for ``is this a binomial coefficient?''}
+Given a number $P$, is there an $n$ with $\binom{n}{2} = P$? Multiply by $8$ and add $1$:
+\[
+\frac{n(n-1)}{2} = P \iff 4n^2 - 4n + 1 = 8P + 1 \iff (2n-1)^2 = 8P+1 .
+\]
+So $P$ is of the form $\binom{n}{2}$ exactly when $8P+1$ is a perfect square $s^2$, and
+then $n = (1+s)/2$.
+
+\begin{example}
+$P = 105$: $8\cdot105+1 = 841 = 29^2$, so $n = (1+29)/2 = 15$.
+$P = 3\cdot5\cdot7\cdot11 = 1155$: $8\cdot 1155 + 1 = 9241$, and $96^2 = 9216 < 9241 < 9409 = 97^2$,
+so $1155$ is not of the form $\binom{n}{2}$.
+\end{example}
+
+\section{The split into two teams}
+
+Two facts about consecutive integers do all the work.
+\begin{enumerate}[label=(\roman*)]
+\item $n$ and $n-1$ share no prime factor: a common factor would divide their difference, $1$.
+\item Exactly one of $n, n-1$ is even.
+\end{enumerate}
+Call the even one $E$ and the odd one $O$, and put $A = E/2$. Then
+\[
+\binom{n}{2} = A\cdot O, \qquad O = 2A+1 \ \text{ or } \ O = 2A-1 .
+\]
+If $\binom{n}{2}$ is a block, each prime of the block divides exactly one of $A$ and $O$. So
+the block's primes split into two \emph{teams}: $S$ (the primes of $A$) and $T$ (the
+primes of $O$), with
+\[
+\Big|\, 2\prod S - \prod T \,\Big| = 1 .
+\]
+In words: \textbf{one team's product is almost exactly twice the other's.} This observation
+is due to StijnC on the Erd\H{o}s Problems forum \cite{EPF}.
+
+\begin{example}[$n=715$]
+$O = 715 = 5\cdot 11\cdot 13$ and $A = 714/2 = 357 = 3\cdot 7\cdot 17$. So
+$T = \{5,11,13\}$, $S = \{3,7,17\}$, and $2\cdot 357 = 714 = 715 - 1$.
+\end{example}
+
+\section{The balance inequality}
+
+\begin{lemma}[Balance inequality]\label{lem:balance}
+Let $n\ge 4$, and suppose every prime factor of $\binom{n}{2}$ lies in $[p,r]$ with $p\ge 5$.
+Let $k$ be the number of prime factors (with multiplicity) and $h=\lfloor k/2\rfloor$. Then
+\[
+\Big(\frac{r}{p}\Big)^{h} \;\ge\; 2 - \frac1p .
+\]
+\end{lemma}
+
+\paragraph{Intuition.} All team members lie between $p$ and $r$. If the primes are packed
+very closely ($r/p$ near $1$), then any two teams have products that are either about equal
+or differ by a huge factor. They can never differ by a factor of almost exactly $2$. The
+inequality measures how much ``spread'' is needed.
+
+\begin{proof}
+Let $s=|S|$ and $t=|T|$ (counted with multiplicity), so $s+t=k$, with
+$p^s \le A \le r^s$ and $p^t \le O \le r^t$. Since $n\ge 4$, $A\ge 2$ and $O\ge 3$, so
+$s,t\ge 1$.
+
+\emph{Case $s=t$.} $O/A = 2 \pm 1/A \ge 2 - 1/p$, while $O/A \le r^s/p^s$.
+
+\emph{Case $s<t$.} $p^{s+1} \le p^t \le O \le 2A + 1 \le 2r^s+1$, so
+$(r/p)^s \ge p/2 - 1/(2p) \ge 2 - 1/p$ (because $p^2-4p+1 \ge 0$).
+
+\emph{Case $s>t$.} $2p^{t+1} \le 2A \le O + 1 \le r^t + 1$, so $(r/p)^t \ge 2p - p^{-t} \ge 2-1/p$.
+
+In every case $(r/p)^{\min(s,t)} \ge 2-1/p$. Since $\min(s,t)\le h$ and $r/p\ge1$, the
+lemma follows.
+\end{proof}
+
+\begin{remark}[Sharpness]
+For $n=14$: $\binom{14}{2} = 91 = 7\cdot 13$, $p=7$, $r=13$, $k=2$, and $13/7 = 2-1/7$
+exactly. The inequality therefore cannot be improved. But $7\cdot 13$ skips $11$, so this is
+not a solution to the problem.
+\end{remark}
+
+\paragraph{Why large starting primes force long blocks.} Near $10^{10}$, consecutive primes
+are on average about $\ln(10^{10}) \approx 23$ apart. Even $1000$ consecutive primes there
+span a ratio $r/p \approx 1 + 23000/10^{10} \approx 1.0000023$. Raising that to the power
+$500$ gives about $1.001$, nowhere near $2$. To reach $2$ one needs tens of thousands of
+primes, and multiplying that many primes near $10^{10}$ gives an astronomically large number.
+
+\section{From intuition to proof: Dusart's prime-gap theorem}
+
+``Primes near $x$ are closely packed'' needs a theorem with explicit constants. We use:
+
+\begin{theorem}[Dusart {\cite[Cor.~5.5]{D18}}]
+For all $x \ge 468\,991\,632$ there is a prime $q$ with
+$x < q \le x\left(1 + \dfrac{1}{5000 \ln^2 x}\right)$.
+\end{theorem}
+
+So when all primes of a block are at least $X_0 = 10\,726\,905\,041$, each step to the next
+prime multiplies by at most $1+\varepsilon$, where
+$\varepsilon = 1/(5000\ln^2 X_0) \approx 3.75\times 10^{-7}$. Over $k$ primes,
+\[
+\frac{r}{p} \le (1+\varepsilon)^{k-1}, \qquad\text{so}\qquad
+\Big(\frac rp\Big)^{\lfloor k/2\rfloor} \le e^{\varepsilon (k-1)\lfloor k/2\rfloor}.
+\]
+Lemma~\ref{lem:balance} needs this to be at least $2-1/p \approx 2$, so
+$\varepsilon(k-1)\lfloor k/2\rfloor \ge \ln 2$, roughly $k^2 \ge 1.386/\varepsilon \approx 3.7\times10^6$.
+The exact computation gives $k \ge 1924$.
+
+\section{The computer search}
+
+Starting primes below $X_0$ are handled by computer. There are exactly
+$\pi(X_0) = 486\,570\,088$ of them.
+
+\paragraph{Step 1: cheap exclusion.} For most starting primes $p$, a simple integer
+inequality ($100\,h\,(r-p) < 68\,p$, which implies $(r/p)^h < 2-1/p$ because
+$(1+x)^h \le e^{hx}$ and $e^{0.68} < 1.975$) shows that Lemma~\ref{lem:balance} fails for
+\emph{every} block length that matters. The start is then discarded in constant time.
+
+\paragraph{Step 2: full check.} For the remaining few million starts, every block length is
+tested with the square test of \S1.1.
+
+\paragraph{The filter trick.} The block products are far too large to write down, since they
+have thousands of digits. But if $8P+1$ is a square, it is also a square modulo any prime
+$\ell$. About half of all residues mod $\ell$ are non-squares, so each ``filter prime''
+$\ell$ rejects about half of the impostors. With $48$ filters, an impostor survives with
+probability about $2^{-48}$. Any survivor is re-checked exactly with integer square roots.
+In every run, the only survivors were the five known solutions.
+
+\paragraph{Checks on the checker.}
+\begin{itemize}
+\item Three independent programs agree for $n\le 10^9$.
+\item The number of starting primes processed equals $\pi(X_0)$, computed by an independent
+  program. That program was itself validated against the known values $\pi(10^6)$,
+  $\pi(10^8)$ and $\pi(10^{10})$.
+\item The filter code was tested against Euler's criterion $2\times10^7$ times, with no
+  errors.
+\end{itemize}
+
+\section{The results}
+
+\begin{theorem}[Block length]
+If $\binom{n}{2}$ is a block of $k$ primes and $n\notin\{4,6,15,21,715\}$, then
+$k\ge 1924$. This relies on Dusart's theorem and the computation.
+\end{theorem}
+\noindent Starts $\ge X_0$: \S4. Starts $< X_0$: every block of $\le 1923$ primes was
+checked by computer (\S5).
+
+\begin{theorem}[Bounded verification]
+There is no solution other than $4,6,15,21,715$ with $n\le 10^{9614}$ (relying on Dusart's
+theorem and the computation), and none with $n\le 10^{12}$ using computation alone.
+\end{theorem}
+
+\begin{theorem}[Small starting primes]
+No block starting at a prime below $100$ and ending at a prime $\le 4\cdot 10^9$ gives a new
+solution. In particular, $n(n-1) = r\#$ (the product of all primes up to $r$, the ``714 and
+715'' question of Nelson, Penney and Pomerance \cite{NPP}) has no new solution with
+$r\le 4\cdot10^9$.
+\end{theorem}
+
+\paragraph{Context.} On the forum \cite{EPF}, D.~Weisenberg's independent search reached
+$n>10^{500}$. D.~A.~Corneth showed on OEIS A280992 \cite{OEIS} that any new solution has a
+prime factor larger than $17389$. That covers every block of primes up to $17389$, i.e.
+$n < 10^{3742}$. The bound $10^{9614}$ goes beyond both.
+
+\section{What Lean certifies}
+
+Lean is a proof assistant: a program that checks every logical step of a proof, down to
+the basic axioms. The balance inequality for consecutive-prime blocks is proved in Lean 4
+with the Mathlib library, stated with the same definitions as the official formal statement
+of the problem:
+\begin{center}
+\texttt{n.choose 2 = $\prod$ i $\in$ Finset.Ico a b, Nat.nth Nat.Prime i}.
+\end{center}
+``No \texttt{sorry}'' means no step was left unproved. ``No \texttt{native\_decide}'' means
+no step relied on trusting compiled code. Lean does \emph{not} certify Dusart's theorem or the
+computer searches.
+
+\section{Why the full problem looks hard}
+
+\paragraph{Random model.} Each way of splitting the block's primes into two teams determines
+one residue class for $n$ modulo $2P$, which gives $2^k$ candidates in all. A solution needs
+the smallest candidate to be tiny, about $\sqrt{2P}$. If the candidates behaved like random
+numbers, the smallest would be about $2P/2^k$, which is vastly bigger than $\sqrt{2P}$ for
+long blocks. An exhaustive computation for blocks starting at $2$ or $3$ (up to $r = 97$)
+matches this random prediction closely. This is strong evidence that no further solutions
+exist, but it is not a proof.
+
+\paragraph{Why standard tools fail.}
+\begin{itemize}
+\item \emph{abc conjecture.} It settles similar questions when numbers contain repeated prime
+  factors. Here every prime appears once, so abc gives nothing.
+\item \emph{Size arguments.} The equation $|2\prod S - \prod T| = 1$ sits exactly at the
+  smallest possible gap between distinct integers, so no size estimate can rule it out.
+\item \emph{Fourier analysis.} The $2^k$ candidates are too few to be forced to ``spread
+  out'' at the needed resolution.
+\end{itemize}
+
+\section{Exercises}
+\begin{exercise} Why can $7$ never divide both $n$ and $n-1$? \end{exercise}
+\begin{exercise} For $n=21$, find $E$, $O$, $A$ and the teams $S$ and $T$. \end{exercise}
+\begin{exercise} Use the test of \S1.1 to decide whether $3\cdot5\cdot7\cdot11\cdot13$ is of
+the form $\binom{n}{2}$. \end{exercise}
+\begin{exercise} Why does a block starting near $10^{10}$ need so many primes? \end{exercise}
+\begin{exercise} What is a ``false positive'' of the filter, and how is it caught? \end{exercise}
+
+\subsection*{Solutions}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item If $7\mid n$ and $7\mid n-1$, then $7$ divides their difference, which is $1$. Impossible.
+\item $E=20$, $O=21$, $A=10$. $S=\{2,5\}$ (since $A = 2\cdot5$) and $T=\{3,7\}$ (since
+  $O = 3\cdot 7$). Check: $2A = 20 = O-1$.
+\item $P = 15015$, $8P+1 = 120121$, and $346^2 = 119716 < 120121 < 120409 = 347^2$. Not a
+  square, so no.
+\item Consecutive primes there are about $23$ apart, so each step raises $r/p$ by only a
+  factor of about $1 + 2.3\times10^{-9}$. Reaching $(r/p)^{k/2}\approx 2$ needs an enormous $k$.
+\item A block whose $8P+1$ is not a square but happens to be a square modulo all $48$
+  filter primes. It is caught by the exact integer square-root check. None occurred.
+\end{enumerate}
+
+\paragraph{Acknowledgements.} The balance observation is due to StijnC; the searches cited
+are by D.~Weisenberg and D.~A.~Corneth. This work was done with substantial assistance from
+Claude (Anthropic), an AI model. Code, data and Lean sources:
+\url{https://github.com/sriharimysore/erdos-386-k2}.
+
+\begin{thebibliography}{9}
+\bibitem{D18} P.~Dusart, Explicit estimates of some functions over primes,
+  \emph{Ramanujan J.} \textbf{45} (2018), 227--251, doi:10.1007/s11139-016-9839-4.
+\bibitem{EPF} Erd\H{o}s Problems forum, thread for Problem \#386,
+  \url{https://www.erdosproblems.com/forum/thread/386}.
+\bibitem{NPP} C.~Nelson, D.~E.~Penney and C.~Pomerance, 714 and 715,
+  \emph{J. Recreational Math.} \textbf{7}(2) (1974), 87--89.
+\bibitem{OEIS} OEIS Foundation, Sequence A280992, \url{https://oeis.org/A280992}.
+\end{thebibliography}
+
+\end{document}
