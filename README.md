@@ -26,6 +26,12 @@ range and proves structural constraints on any further solution.
   is, every block of primes ≤ 17389 is already excluded, which reaches n < 10³⁷⁴² for blocks
   starting at small primes.
 
+- erdosproblems.com forum, thread #386: StijnC (24 Aug 2025) observed that 2∏_I p_i and
+  ∏_J p_j must differ by 1, so each fixed block length allows only finitely many solutions
+  (via prime gaps). He also reported an independent search by D. Weisenberg: a new k = 2
+  solution would need n > 10⁵⁰⁰. **Our balance lemma is an explicit, quantitative form of
+  StijnC's observation**, and result 3 makes his "finitely many for fixed length" explicit.
+
 Result 2 subsumes Corneth's bound: every block of primes ≤ 17389 gives n < 10³⁷⁴² < 10⁹⁶¹⁴.
 Result 4 (end prime up to 4·10⁹ for starts < 100) goes further for small starting primes.
 

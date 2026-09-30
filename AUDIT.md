@@ -305,3 +305,24 @@ results now rest on the single peer-reviewed Cor. 5.5.**
 11–15 are safe to post, with the caveat "conditional on Dusart 2018, Cor. 5.5". n ≤ 10⁹⁶¹⁴
 subsumes Corneth's 2017 bound: every block of primes ≤ 17389 has product ≤ 17389#, i.e.
 n < 10³⁷⁴².
+
+---
+
+## Addendum (2026-09-30): forum thread #386 read; the balance idea is prior work
+
+The author supplied the full forum thread.
+- **StijnC (24 Aug 2025)** already gave the balance idea for k = 2: 2∏_I p_i and ∏_J p_j
+  differ by at most one, so for each fixed block length there are finitely many solutions
+  (by prime gaps). He also stated that there are finitely many with ≤ 10 primes.
+- **Same comment:** Desmond Weisenberg's independent search, "a new solution for k = 2 would
+  need n > 10⁵⁰⁰ (if no machine errors happened and some estimates work out)".
+
+**Consequences:**
+- The balance lemma must be presented as an **explicit, quantitative version of StijnC's
+  observation**, not as a new idea. The forum draft, README, CLAIMS and paper were updated.
+- Our unconditional n ≤ 10¹² is below Weisenberg's 10⁵⁰⁰. Our n ≤ 10⁹⁶¹⁴ (Dusart Cor. 5.5)
+  exceeds it.
+- The block-length theorem (none with ≤ 1923 primes) is an explicit strengthening of
+  "finitely many for each fixed length" and "≤ 10 primes".
+- The other substantial contributions are the explicit constants, the reproducible code
+  and the Lean formalization.
