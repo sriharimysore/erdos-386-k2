@@ -16,7 +16,7 @@ Code, logs and proofs: [REPO LINK]
   further term has a prime factor > prime(2000) = 17389. That covers every block of primes
   ≤ 17389, which is far beyond 10¹² for blocks starting at small primes.
 
-**2. A balance lemma (elementary; arithmetic core checked in Lean 4).**
+**2. A balance lemma (elementary; block form machine-checked in Lean 4 + Mathlib).**
 - *Statement.* If n ≥ 4 and every prime factor of C(n,2) lies in [p, r] with p ≥ 5, then
   (r/p)^⌊k/2⌋ ≥ 2 − 1/p, where k = Ω(C(n,2)).
 - *Idea.* Write C(n,2) = A·O with A = E/2, where E and O are the even and odd members of
@@ -50,8 +50,10 @@ results as conditional.
 
 **Trust level.**
 - The computations are ordinary C/Python programs, not formally verified.
-- The Lean 4 part (no Mathlib) covers Lemma 0 and the arithmetic core of the balance lemma,
-  not the connection to `erdos_386.variants.two`.
+- In Lean 4 + Mathlib (no sorry, no native_decide; standard axioms only), the balance lemma
+  for blocks is proved with the upstream objects: `n.choose 2 = ∏ i ∈ Finset.Ico a b,
+  Nat.nth Nat.Prime i`, a ≥ 2. Lemma 0 is also proved.
+- The bounded results and the prime-gap input are not formalized.
 
 **Disclosure.** This work was done with substantial assistance from Claude (Anthropic), an
 AI model.
