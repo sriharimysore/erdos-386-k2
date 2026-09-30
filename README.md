@@ -38,12 +38,25 @@ p_a ≥ 5, apply the general form with p = p_a and r = p_{a+k−1}.
 13/7 = 2 − 1/7. That example is *not* a consecutive block (11 is skipped), so it says nothing
 about sharpness of the block form. Full proofs are in [`phase3/LEMMA.md`](phase3/LEMMA.md).
 
-### Lean 4 (kernel-checked, core Lean only, no Mathlib)
+### Lean 4 (kernel-checked)
+Core Lean, no Mathlib:
 - `Erdos 386/Balance.lean`: `balance_core` and `balance_mono`, the arithmetic core of the
   balance lemma.
 - `Erdos 386/Lemma0.lean`: `choose2_split`: for n ≥ 4, C(n,2) = a·b with a, b ≥ 2.
 
-Axioms used: `propext`, `Quot.sound`. No `sorry`, no `native_decide`. Build with `lake build`.
+With Mathlib (v4.34.1), stated with the **same objects as the upstream statement**
+`erdos_386.variants.two` (`n.choose 2`, `∏ i ∈ Finset.Ico a b, Nat.nth Nat.Prime i`):
+- `Erdos 386/BalanceBlock.lean`, `balance_block`: if n ≥ 4, a ≥ 2 and
+  `n.choose 2 = ∏ i ∈ Finset.Ico a b, nth Nat.Prime i`, then
+  `(2p − 1)·p^h ≤ p·r^h` with p = `nth Prime a`, r = `nth Prime (b−1)`, h = (b−a)/2.
+  This includes a formal proof of the prime-splitting step (`split_prod`).
+- `choose2_ne_nth_prime`: for n ≥ 4, `n.choose 2 ≠ nth Nat.Prime a` (blocks of length 1).
+
+No `sorry`, no `native_decide`. Axioms:
+- core files: `propext`, `Quot.sound`;
+- Mathlib files: `propext`, `Classical.choice`, `Quot.sound` (Lean's three standard axioms).
+
+Output is in `crosscheck/Axioms.lean`. Build with `lake build` (needs Mathlib, ~8 GB).
 
 **Not yet formalized:**
 - the prime-splitting step (needs Mathlib),

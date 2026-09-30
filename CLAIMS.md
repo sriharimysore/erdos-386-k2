@@ -14,9 +14,9 @@ Status legend:
 | 2 | No other solution with 4 ≤ n ≤ 10⁸ | independent_search.py; block_search.py; block_search.c | **CC** (3 independent implementations) | **yes** |
 | 3 | No other solution with 4 ≤ n ≤ 10⁹ | block_search.py and block_search.c (same block counts); deep_search at N = 10⁹ with and without pruning | **CC** | **yes** |
 | 4 | No other solution with 4 ≤ n ≤ 10¹² | block_search.c only (+ Lemma 0) | C1 at 10¹². Code cross-checked to 10⁹. Lemma 0 LEAN | **only with caveat** ("single C implementation at this range, cross-validated up to 10⁹") |
-| 5 | Lemma 0: C(n,2) not prime for n ≥ 4 | elementary | PR + LEAN | **yes** |
+| 5 | Lemma 0: C(n,2) not prime for n ≥ 4 | elementary | PR + LEAN (`choose2_split`; `choose2_ne_nth_prime` against `nth Nat.Prime`) | **yes** |
 | 6 | Balance lemma, general form (all prime factors in [p, r], p ≥ 5, k = Ω) | elementary | PR; LEAN (arithmetic core only); numerical: 499,999 cases, 0 violations | **yes** (say the Lean covers only the arithmetic core) |
-| 7 | Balance lemma, block form (Corollary 1′) | claim 6 | PR | **yes** |
+| 7 | Balance lemma, block form (Corollary 1′) | claim 6 | PR + **LEAN** (`balance_block`, upstream objects, Mathlib; axioms propext / Classical.choice / Quot.sound) | **yes** |
 | 8 | General form is sharp (n = 14, 91 = 7·13), which is not a block | arithmetic | PR, checked numerically | **yes** |
 | 9 | For blocks, equality is impossible for p ≥ 5 | Bertrand–Chebyshev theorem (classical) | PR (remark only, used nowhere) | yes, but unnecessary. Omit from the post. |
 | 10 | Lemma 2 (integer test) and Lemma 3 (length cap) | elementary | PR | **yes** |

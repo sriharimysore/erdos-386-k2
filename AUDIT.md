@@ -215,3 +215,30 @@ Related adversarial checks:
   None of the bounded results is Lean-certified.
 - **Closing the gap needs Mathlib**, and still could not cover the billion-block
   computations or the analytic theorems.
+
+---
+
+## Addendum (2026-09-30): Mathlib formalization
+
+Mathlib v4.34.1 installed. New file `Erdos 386/BalanceBlock.lean`, and `lake build` succeeds.
+- `split_prod`: if A·O is a product of distinct primes f(i), i ∈ I, then A = ∏ of the f(i)
+  dividing A and O = ∏ of the rest. This formalizes step L1.2 (the prime split).
+- `choose2_ne_nth_prime`: Lemma 0 against `nth Nat.Prime`.
+- `balance_block`: Corollary 1′ stated with the upstream objects
+  (`n.choose 2 = ∏ i ∈ Finset.Ico a b, Nat.nth Nat.Prime i`, a ≥ 2).
+
+`#print axioms`: `split_prod`, `choose2_ne_nth_prime` and `balance_block` depend on
+`[propext, Classical.choice, Quot.sound]`. `Classical.choice` is new relative to the core
+files. It is a standard Lean axiom, used throughout Mathlib; it is not `sorry` and not
+`native_decide` (which would show `Lean.ofReduceBool`).
+
+**What is now Lean-certified (updates Task 5):** the whole of Corollary 1′ (the balance
+lemma for consecutive-prime blocks), stated in the upstream vocabulary.
+
+**Still not formalized:**
+- Lemmas 2 and 3,
+- the tail argument and Dusart's theorems,
+- all computations,
+- any bounded-n result.
+
+There is still no theorem about `erdos_386.variants.two` itself.
