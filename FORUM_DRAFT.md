@@ -32,7 +32,7 @@ Ramanujan J. 45 (2018), Cor. 5.5: for x ≥ 468,991,632 there is a prime in
 (x, x(1 + 1/(5000 ln²x))]. Using it for starting primes ≥ 1.07·10¹⁰, and computing
 everything below that:
 - no solutions besides the five for **n ≤ 10⁹⁶¹⁴**. This contains the region covered by
-  Corneth's bound (every block of primes ≤ 17389 has n ≲ 10³⁷⁴⁰);
+  Corneth's bound (every block of primes ≤ 17389 has n < 10³⁷⁴²);
 - for **all** n, any further solution is a product of **at least 1924 consecutive primes**.
 
 **4. Small starting primes (computation only, single implementation).**

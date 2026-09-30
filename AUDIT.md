@@ -252,7 +252,7 @@ The author supplied the text of the OEIS A280992 page.
 - **Prior work missed by the original write-up:** David A. Corneth (Oct 21 2017): "If a(8)
   exists, it's divisible by a prime p > prime(2000) = 17389." His PARI program `uptoprime`
   checks every block contained in the first n primes, via ratios of primorials. So every
-  block using only primes ≤ 17389 was already excluded, reaching n ≈ 10³⁷⁷⁸.
+  block using only primes ≤ 17389 was already excluded, reaching n < 10³⁷⁴².
 - **Consequences:**
   - The claim "largest previous search n ≤ 5·10⁶" understated prior work. It has been
     corrected in the README, forum draft and paper.
@@ -304,4 +304,4 @@ results now rest on the single peer-reviewed Cor. 5.5.**
 **Status change:** G2 moves from NEEDS HUMAN VERIFICATION to **verified at source**. Claims
 11–15 are safe to post, with the caveat "conditional on Dusart 2018, Cor. 5.5". n ≤ 10⁹⁶¹⁴
 subsumes Corneth's 2017 bound: every block of primes ≤ 17389 has product ≤ 17389#, i.e.
-n ≲ 10³⁷⁴⁰.
+n < 10³⁷⁴².

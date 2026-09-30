@@ -23,10 +23,10 @@ range and proves structural constraints on any further solution.
 **Prior work (OEIS [A280992](https://oeis.org/A280992)):**
 - "No more terms up to the 5000000th triangular number", i.e. n ≤ 5·10⁶.
 - D. A. Corneth (2017): any further term is divisible by a prime > prime(2000) = 17389. That
-  is, every block of primes ≤ 17389 is already excluded, which reaches n ≈ 10³⁷⁷⁸ for blocks
+  is, every block of primes ≤ 17389 is already excluded, which reaches n < 10³⁷⁴² for blocks
   starting at small primes.
 
-Result 2 subsumes Corneth's bound: every block of primes ≤ 17389 gives n ≲ 10³⁷⁴⁰ < 10⁹⁶¹⁴.
+Result 2 subsumes Corneth's bound: every block of primes ≤ 17389 gives n < 10³⁷⁴² < 10⁹⁶¹⁴.
 Result 4 (end prime up to 4·10⁹ for starts < 100) goes further for small starting primes.
 
 **External input:** results 2 and 3 use exactly one external theorem: Dusart, *Explicit
