@@ -1,12 +1,8 @@
-<!-- DRAFT — do not post until the checklists in AUDIT.md (Task 3, and the OEIS check in
-CLAIMS.md #17) are done. Only claims marked "yes" or "only with caveat" in CLAIMS.md are
-used, with their caveats. -->
-
 **k = 2: a bounded verification and a structural constraint. Not a solution.**
 
 For k = 2 (is n(n−1)/2 a product of consecutive primes infinitely often?) I have some
 computations and one elementary lemma. I'd welcome corrections and pointers to prior work.
-Code, logs and proofs: [REPO LINK]
+Code, logs and proofs: https://github.com/sriharimysore/erdos-386-k2
 
 **1. Search (computation only).**
 - No solutions besides n = 4, 6, 15, 21, 715 for n ≤ 10⁹. Three independent programs agree.
@@ -50,7 +46,7 @@ everything below that:
 - The computations are ordinary C/Python programs, not formally verified.
 - In Lean 4 + Mathlib (no sorry, no native_decide; standard axioms only), the balance lemma
   for blocks is proved with the upstream objects: `n.choose 2 = ∏ i ∈ Finset.Ico a b,
-  Nat.nth Nat.Prime i`, a ≥ 2. Lemma 0 is also proved.
+  Nat.nth Nat.Prime i`, a ≥ 2. So is the fact that C(n,2) is never prime for n ≥ 4.
 - The bounded results and Dusart's theorem are not formalized.
 
 **Disclosure.** This work was done with substantial assistance from Claude (Anthropic), an
